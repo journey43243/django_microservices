@@ -1,0 +1,2 @@
+VHOST: /
+QUEUE: products_to_redis

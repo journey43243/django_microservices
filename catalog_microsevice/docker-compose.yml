@@ -1,0 +1,13 @@
+version: '3.9'
+
+
+services:
+  catalog:
+    build:
+      context: ./catalog_dir
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8001
+    volumes:
+      - .:/app
+
