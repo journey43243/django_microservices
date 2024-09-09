@@ -3,7 +3,7 @@ from rest_framework import routers
 from django.urls import path, include
 
 products_router = routers.DefaultRouter()
-products_router.register(r'products', ProductsViewSet)
+products_router.register(r'products', ProductsViewSet, basename = 'products')
 urlpatterns = [
     path('api/v1/', include(products_router.urls))
 ]

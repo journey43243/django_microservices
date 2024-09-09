@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from django.core.cache import cache
+from rest_framework.response import Response
 
 class Products(models.Model):
 
@@ -35,6 +37,34 @@ class Products(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+
+    '''   {
+        "id": "5fb08ff5-0a4f-4a2a-9704-ec1713a152ba",
+        "name": "Air Zoom 7",
+        "sale_status": 0,
+        "price": 6999.0,
+        "stock_status": 1,
+        "sex": 3,
+        "seazon": 4,
+        "reviews": null,
+        "images_fk": null
+    }
+    '''
+    def add_to_cache(self):
+        cache.add('products', {
+            "id" : str(self.id),
+            "name" : str(self.name),
+            "sale_status" : int(self.sale_status),
+            "price" : int(self.price),
+            "stock_status" : int(self.stock_status),
+            "sex" : int(self.sex),
+            "seazon" : int(self.seazon),
+            "reviews" : str(self.reviews),
+            "images" : str(self.images_fk),
+        })
+        
+        return Response('{\'status\' : 200}')
 
 
 class Categories(models.Model):

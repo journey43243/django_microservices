@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#05mef4ilo9)^5q6_h9$gg_4sdw$u&$kd=on-1ywky-vab0mc%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '192.168.0.106']
+ALLOWED_HOSTS = ['0.0.0.0']
 
 
 # Application definition
@@ -84,6 +84,14 @@ DATABASES = {
         'PASSWORD': '123Admin456!',
         'HOST': 'db',
         'PORT': 5432,
+    }
+}
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://10.5.0.2:6379",
     }
 }
 
