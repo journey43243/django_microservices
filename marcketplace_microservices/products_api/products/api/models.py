@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from django.core.cache import cache
+from django.core.cache import cache,caches
 from rest_framework.response import Response
 
 class Products(models.Model):
@@ -25,7 +25,7 @@ class Products(models.Model):
         spring = 2, 'Spring'
         summer = 1 , 'Summer'
         autumn = 0, 'autumn'
-    id = models.UUIDField(primary_key= True, default= uuid.uuid4)
+    prod_id_pk = models.UUIDField(primary_key= True, default= uuid.uuid4)
     name = models.CharField(max_length= 255, null= False, blank= False)
     sale_status = models.IntegerField(choices= Sale_Status, default= Sale_Status.not_sale)
     price = models.FloatField(null= False, blank= False)
@@ -51,20 +51,7 @@ class Products(models.Model):
         "images_fk": null
     }
     '''
-    def add_to_cache(self):
-        cache.add('products', {
-            "id" : str(self.id),
-            "name" : str(self.name),
-            "sale_status" : int(self.sale_status),
-            "price" : int(self.price),
-            "stock_status" : int(self.stock_status),
-            "sex" : int(self.sex),
-            "seazon" : int(self.seazon),
-            "reviews" : str(self.reviews),
-            "images" : str(self.images_fk),
-        })
-        
-        return Response('{\'status\' : 200}')
+
 
 
 class Categories(models.Model):
@@ -76,10 +63,10 @@ class Categories(models.Model):
         shoes = 3, 'shoes'
 
 
-    id = models.IntegerField(primary_key= True)
+    cat_id_pk = models.IntegerField(primary_key= True)
     name = models.CharField(max_length= 25)
     relation_to = models.IntegerField(choices= Relations_Choiches, null= False, blank= False)
-    products = models.ForeignKey('Products', on_delete= models.PROTECT ,null= True, blank= False, related_name= 'categories')
+    products_fk = models.ForeignKey('Products', on_delete= models.PROTECT ,null= True, blank= False, related_name= 'categories', to_field= 'prod_id_pk')
 
     def __str__(self) -> str:
         return self.name
@@ -91,7 +78,7 @@ class Images(models.Model):
 
 class Sizes(models.Model):
 
-    id = models.IntegerField(primary_key= True)
+    size_id_pk = models.IntegerField(primary_key= True)
     name = models.CharField(max_length=4)
     products_fk = models.ForeignKey('Products', on_delete= models.PROTECT,null= True, blank= False, related_name= 'sizes')
 
