@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  fast_api:
+    build: 
+     context : ./
+     dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - 8002:8000
+    command: uvicorn main:app --host 0.0.0.0 --reload
+
+  user_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 5433:5432
+    container_name: user_db
+    volumes:
+      - .db:/var/lib/postgresql/data/pgdata
+
+volumes:
+  user_db:

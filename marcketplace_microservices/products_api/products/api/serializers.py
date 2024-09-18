@@ -32,6 +32,8 @@ class DataMixins:
             serializer = cls(cls.Meta.model.objects.all(), many = True)
             cache.set(f'{cls.Meta.name}', serializer.data)
             return cache.get(f'{cls.Meta.name}')
+        
+
     
     @classmethod
     def set_queryset(cls, validate_data):
@@ -39,7 +41,9 @@ class DataMixins:
         if cls.Meta.name == 'categories':
             val_d_copy.update(relation_to = cls.Meta.model.Relations_Choiches(val_d_copy['relation_to']).name)
             return cache.set(f'{cls.Meta.name}', cls.get_queryset() + [val_d_copy])
+        return cache.set(f'{cls.Meta.name}', cls.get_queryset() + [validate_data])
     
+
     @classmethod
     def base_create(cls, validate_data):
         cls.set_queryset(validate_data=validate_data)
@@ -54,13 +58,6 @@ class ProductsSerializer(serializers.ModelSerializer, DataMixins):
         name = 'products'
         model = Products
         fields = '__all__'
-
-    # #think about async
-    # def create(self,validate_data):
-    #     self.set_queryset(validate_data= validate_data)
-    #     product = Products.objects.create(**validate_data)
-    #     product.save()
-    #     return product
 
 
     def create(self,validate_data):
